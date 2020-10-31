@@ -1,0 +1,112 @@
+:root {
+    --primary: hsl(264, 74%, 30%);
+    --light-primary: #0f002410;
+    --tertiary: rgb(82, 206, 11);
+    --white: #fff;
+    --black: #000;
+    --indicator: #ff7900;
+    --backdropBg: rgba(0, 0, 0, 0.7);
+    --font: 900;
+    --animate-duration: 500ms;
+    --animate-delay: 500ms;
+    --animate-repeat: 1;
+}
+
+.primary__color {
+    color: var(--primary);
+}
+
+.primary__bg {
+    background: var(--primary);
+}
+
+.light__primary__bg {
+    background: var(--light-primary);
+}
+.auth__bg__dark {
+    background: var(--primary);
+    color: var(--white);
+}
+.auth__bg__outline__dark {
+    border: 1px solid grey;
+    color: var(--primary);
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    font-weight: 900;
+}
+.invalid{
+    border-bottom: 2px solid red !important;
+}
+.card__rounded__smooth {
+    border-radius: 10px !important;
+}
+.send__button {
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    border: none;
+    background: rgb(100, 199, 158);
+    font-weight: 900;
+}
+.deposit_button{
+    border-radius: 10px;
+    padding: .5rem .7rem;
+    border: none;
+    background: var(--primary);
+    font-weight: 900;
+}
+.chart__card {
+    height: 20px !important;
+    width: 40px;
+}
+
+.ltc__bcc__chart {
+    border-left: 2px solid purple;
+}
+
+.info_modal {
+    position: fixed;
+    top: 54px;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 999;
+}
+
+.info {
+    position: absolute;
+    top: 20%;
+    right: 35%;
+    left: 35%;
+    border-radius: 10px;
+    /* bottom: 20%; */
+}
+.btc-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(80px,1fr));
+    row-gap: 10px;
+    column-gap: 10px;
+}
+
+.show{
+    display: none !important;
+}
+
+@media (max-width: 678px) {
+    .info {
+        top: 8%;
+        right: 5%;
+        left: 5%;
+        /* bottom: 5%; */
+    }
+    .info_plus{
+        bottom: 5%;
+    }
+    .hide{
+        display: none;
+    }
+    .show{
+        display: flex !important;
+    }
+    
+}

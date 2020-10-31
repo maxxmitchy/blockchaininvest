@@ -1,0 +1,38 @@
+:root {
+    --primary: #411485;
+    --light-primary: #0f002417;
+    --white: #fff;
+}
+
+.auth__bg {
+    background: var(--light-primary);
+}
+.auth__bg__dark {
+    background: var(--primary);
+    color: var(--white);
+}
+.auth__text__color {
+    color: var(--primary);
+}
+.auth__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+}
+.auth__content__container {
+    width: 70%;
+    height: 500px;
+}
+
+@media (max-width: 678px) {
+    .auth__content__container {
+        margin-top: 8.5rem;
+        width: 100%;
+        background: #fff;
+    }
+    .side__auth__nav {
+        display: none !important;
+    }
+}

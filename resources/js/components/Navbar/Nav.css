@@ -1,0 +1,245 @@
+:root {
+    --primary: #411485;
+    --secondary: #e1e3e6;
+    --white: #fff;
+    --black: #000;
+    --indicator:#ff7900;
+    --backdropBg: rgba(0, 0, 0, 0.7);
+    --font: 900;
+    --animate-duration: 500ms;
+    --animate-delay: 500ms;
+    --animate-repeat: 1;
+}
+
+.primaryBg {
+    background: var(--primary);
+    color: var(--white);
+}
+
+.primaryColor{
+    color: var(--primary);
+}
+
+.indicator{
+    background: var(--indicator);
+    color: var(--white);
+}
+
+.small_btn{
+    padding: -4rem 0 ;
+    border-radius: 10px;
+}
+
+.thick-font {
+    font-weight: 900 !important;
+    font-size: 0.9rem;
+}
+
+.toolbar {
+    position: fixed;
+    width: 100%;
+    background-color: var(--primary);
+    top: 0;
+    left: 0;
+    padding: 0.5rem 0;
+    z-index: 9999;
+}
+
+.toolbar_navigation {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 1rem;
+    z-index: 999;
+}
+
+.toolbar_nav_items ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.toolbar_nav_items li {
+    padding: 0 0.5rem;
+}
+
+.toolbar_nav_items a {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 1rem;
+}
+.profile {
+    position: fixed;
+    top: 4.5rem;
+    right: 1rem;
+    min-height: 280px;
+    width: 220px;
+    border-radius: 10px;
+}
+
+.profile_container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    z-index: 999;
+}
+.profile_bottom {
+    position: fixed;
+    border-radius: 10px;
+    min-height: 350px;
+    top: 15%;
+    width: 280px;
+    background-color: var(--white);
+    z-index: 99999;
+}
+
+.profile ul,
+.profile_bottom ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.profile li,
+.profile_bottom li {
+    padding: 0.5rem 1rem;
+}
+
+.backdrop {
+    position: fixed;
+    top: 60px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.spacer {
+    flex: 1;
+}
+
+.animate__animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-duration: var(--animate-duration);
+}
+.primary {
+    color: #fff;
+}
+
+.bg-pri {
+    /* background-color: #ff7900; */
+    background-color: #1b3497;
+}
+
+.sidenav {
+    position: fixed;
+    left: 0;
+    height: 100vh !important;
+    width: 260px;
+    background-color: var(--secondary);
+    color: var(--black);
+    z-index: 9999;
+    display: none;
+}
+.icon {
+    z-index: 9999;
+    position: fixed;
+    top: 0.7rem;
+    right: 0.7rem;
+}
+
+@-webkit-keyframes fadeInLeft {
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 0);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+    }
+}
+@keyframes fadeInLeft {
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 0);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+    }
+}
+.fadeInLeft {
+    -webkit-animation-name: fadeInLeft;
+    animation-name: fadeInLeft;
+}
+@-webkit-keyframes fadeOutLeft {
+    0% {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        -webkit-transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+@keyframes fadeOutLeft {
+    0% {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        -webkit-transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+.fadeOutLeft {
+    -webkit-animation-name: fadeOutLeft;
+    animation-name: fadeOutLeft;
+}
+
+.dropdown {
+    height: 0;
+    overflow-y: hidden;
+}
+
+@media (max-width: 678px) {
+    .topnav {
+        display: none;
+    }
+    .toolbar_nav_items {
+        display: none;
+    }
+
+    .sidenav {
+        top: 0;
+        display: block;
+    }
+    .backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--backdropBg);
+        z-index: 999;
+    }
+    .sidenav_transform {
+        transform: translateX(-100%);
+    }
+}
+
+@media (min-width: 679px) {
+    .bottomnav {
+        display: none;
+    }
+    .hamburgerIcon {
+        display: none;
+    }
+}

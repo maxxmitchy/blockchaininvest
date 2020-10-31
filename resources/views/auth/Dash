@@ -1,0 +1,377 @@
+import React, { useState, useEffect, useRef } from "react";
+import "./users.css";
+import { FaPlus, FaTimes } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
+import TextInput from "../../js/components/Auth/common/TextInput";
+import SelectInput from "../../js/components/Auth/common/SelectInput";
+import { GrNotification } from "react-icons/gr";
+import Axios from "axios";
+import { select, line, curveCardinal } from "d3";
+import AddWallet from "../../js/components/User/partials/AddWallet";
+import Withdraw from "../../js/components/User/partials/Withdraw";
+
+const Dashboard = ({ user }) => {
+
+    const [modal, setModal] = useState({
+        open: false,
+        component : "",
+        form:""
+    });
+
+    useEffect(() => {
+        if (modal.open) {
+            document.body.style.overflowY = "hidden";
+        } else {
+            document.body.style.overflowY = "scroll";
+        }
+    }, [modal]);
+
+    const [cryptodata, setCryptodata] = useState([]);
+    const [pctdata, setPctdata] = useState([]);
+
+    const svgRef = useRef();
+
+    useEffect(() => {
+        Axios.get("api/endpoint").then(res => {
+            setCryptodata(res.data[0].prices);
+        });
+        Axios.get("api/endpointpct").then(res => {
+            setPctdata(res.data);
+        });
+    }, []);
+
+    useEffect(() => {
+        const svg = select(svgRef.current);
+        if (cryptodata?.length) {
+            const myLine = line()
+                .x((value, index) => index * 10)
+                .y((value) =>  (value));
+            // .curve(curveCardinal);
+            svg.selectAll("path")
+                .data([cryptodata])
+                .join("path")
+                .attr("d", value =>
+                    myLine(
+                        value.map(function(x) {
+                            return Number(x / 100);
+                        })
+                    )
+                )
+                .attr("fill", "none")
+                .attr("stroke", "orangered");
+        }
+    }, [cryptodata]);
+
+    const handleHover = e => {
+        const svgLoc = svgRef.current.getBoundingClientRect();
+        const adjustment = (svgLoc.width - 180) / 2;
+        const relativeLoc = e.clientX - svgLoc.left - adjustment;
+    };
+
+
+    const  handleMakeTransaction = () => {}
+
+    return (
+        <React.Fragment>
+            {/**modal */}
+            {modal.open && (
+                <div className="info_modal">
+                    <div className={`bg-white py-3 ${modal.form}`}>
+                        <FaTimes
+                            className="text-white mt-2"
+                            onClick={() =>
+                                setModal({ ...modal, open: false,component:"",form:"" })
+                            }
+                            style={{
+                                position: "absolute",
+                                right: "-.6rem",
+                                top: "-1.5rem",
+                                fontSize: "1em",
+                                cursor: "pointer"
+                            }}
+                        />
+                        {modal.component}
+                    </div>
+                </div>
+            )}
+            {/**modal end*/}
+            <div className="container mt-5">
+                <div className="row">
+                    <div
+                        className="col-md-3 light__primary__bg py-3 py-md-5 px-md-4"
+                        style={{ height: "130vh" }}
+                    >
+                        <br />
+                        <b className="text-uppercase font-weight-bolder">
+                            current balance
+                        </b>
+                        <h1>45,345 USD</h1>
+                        <h6 className="text-success">+3,454 USD</h6>
+                        <br />
+                        <b className="text-uppercase font-weight-bolder">
+                            Your Wallets
+                        </b>
+                        {user.btc || user.eth || user.bcc || user.ltc ? (
+                            <p className="text-secondary">
+                                Click one of the wallets to start funding.
+                            </p>
+                        ) : (
+                            <p className="text-secondary">
+                                Click below to add a wallet.
+                            </p>
+                        )}
+                        <div className="-flex justify-content-beteen">
+                            {user.btc || user.eth || user.bcc || user.ltc ? (
+                                <>
+                                    <div className="btc-grid">
+                                        <div
+                                            style={{ background: "orangered" }}
+                                            className="rounded pt-2 text-white d-flex flex-column justify-content-center align--tems-center"
+                                        >
+                                            <p className="text-center">
+                                                BITCOIN
+                                            </p>
+                                            <p className="font-weight-bolder text-center">
+                                                {user.btc ?? "xxxxxxxx"}
+                                            </p>
+                                            <p className="font-weight-bolder text-center">
+                                                {user.roiBTC} btc / 3,560 usd
+                                            </p>
+                                        </div>
+                                        <div
+                                            style={{ background: "purple" }}
+                                            className="rounded pt-2 text-white d-flex flex-column justify-content-center align--tems-center"
+                                        >
+                                            <p className="text-center">
+                                                ETHEREUM
+                                            </p>
+                                            <p className="font-weight-bolder text-center">
+                                                {user.eth ?? "xxxxx"}
+                                            </p>
+                                            <p className="font-weight-bolder text-center">
+                                                {user.roiETH} btc / 3,560 usd
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div
+                                        style={{
+                                            cursor: "pointer",
+                                            boxShadow: "0px 0px 10px #411485",
+                                            width: "45px"
+                                        }}
+                                        onClick={()=>setModal({ ...modal, open: true,component:<AddWallet/>,form:"info" })}
+                                        className="d-flex primary__bg text-white mt-2 rounded-circle p-3"
+                                    >
+                                        <FaPlus />
+                                    </div>
+                                </>
+                            ) : (
+                                <div
+                                    style={{
+                                        cursor: "pointer",
+                                        boxShadow: "0px 0px 10px #411485",
+                                        width: "45px"
+                                    }}
+                                    onClick={()=>setModal({ ...modal, open: true,component:<AddWallet/>,form:"info"  })}
+                                    className="d-flex primary__bg text-white mt-2 rounded-circle p-3"
+                                >
+                                    <FaPlus />
+                                </div>
+                            )}
+                        </div>
+                        <br />
+                        <br />
+                        <b className="text-uppercase font-weight-bolder">
+                            recent transactions
+                        </b>
+                        <div className="mt-3 text-secondary">
+                            Fund your wallet and start getting huge returns on
+                            investment. Our traders are top notch experts and
+                            all risks are covered for a minimal cost.
+                        </div>
+                        <button onClick={()=>setModal({...modal,open:true,component:<Withdraw/>,form:"pt-3 info info_plus"})} style={{cursor:"pointer"}} className="btn btn-outline-secondary mt-3">
+                            Start Earning
+                        </button>
+                    </div>
+
+                    <div className="col-md-9 py-md-5 px-md-5">
+                        <div className="row">
+                            <div className="col-md-6">
+                                <h1 className="text-secondary mt-3">
+                                    Overview
+                                </h1>
+                                <p className="text-secondary">
+                                    Hi {`${user.first_name} ${user.last_name}`},
+                                    welcome back to blockchainfinancial.
+                                </p>
+                            </div>
+                            <div className="col-md-6">
+                                <br />
+                                <GrNotification className="mt-md-2 h1 rounded-circle p-2 shadow" />
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-6">
+                                <br />
+                                <h5 className="font-weight-bolder mb-3">
+                                    Marketcap (24HR CHANGE)
+                                </h5>
+                                <div
+                                    className="table-responsive shadow px-2 py-3 mb-5"
+                                    style={{ borderRadius: "20px" }}
+                                >
+                                    <table className="table table-borderless">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Currency</th>
+                                                <th scope="col">Last Price</th>
+                                                <th scope="col">Change</th>
+                                                <th scope="col">Buy</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {pctdata.map(data => {
+                                                return (
+                                                    <tr key={data.id}>
+                                                        <td className="d-flex">
+                                                            <img
+                                                                src={
+                                                                    data.logo_url
+                                                                }
+                                                                alt=""
+                                                                className="img-fluid mr-2"
+                                                                style={{
+                                                                    width:
+                                                                        "20px",
+                                                                    height:
+                                                                        "20px"
+                                                                }}
+                                                            />
+                                                            <b className="mr-3">
+                                                                {data.currency}
+                                                            </b>
+                                                        </td>
+                                                        <td>
+                                                            <b className="text-secondary">
+                                                                $
+                                                                {Number(
+                                                                    data.price
+                                                                ).toFixed(2)}
+                                                            </b>
+                                                        </td>
+                                                        <td>
+                                                            <b className="text-success">
+                                                                {Number(
+                                                                    data["1d"]
+                                                                        .price_change_pct *
+                                                                        100
+                                                                ).toFixed(2)}
+                                                                %
+                                                            </b>
+                                                        </td>
+                                                        <td>
+                                                            <FaPlus
+                                                                onClick={
+                                                                    handleMakeTransaction
+                                                                }
+                                                                style={{
+                                                                    color:
+                                                                        "#411485",
+                                                                    cursor:
+                                                                        "pointer"
+                                                                }}
+                                                            />
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="card rounded-0 border-0 p-4 shadow card__rounded__smooth">
+                                    <b className="mb-3 font-weight-bolder text-secondary">
+                                        Quick Transaction
+                                    </b>
+                                    <div className="d-flex justify-content-between">
+                                        <button className="btn mr-2 auth__bg__outline__dark">
+                                            Send To wallet
+                                        </button>
+                                        <div className="mt-2">
+                                            <b className="font-weight-bolder">
+                                                Receive
+                                            </b>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <hr />
+                                    <form>
+                                        <TextInput
+                                            type="text"
+                                            id="wallet"
+                                            label="Wallet Address"
+                                            name="wallet_address"
+                                            // onChange={handleChange}
+                                            // value={login.email}
+                                        />
+                                        <button className="send__button btn-block text-white">
+                                            Process Request
+                                        </button>
+                                    </form>
+                                </div>
+                                <br />
+                                <br />
+                            </div>
+                        </div>
+                        <h5 className="my-3 text-uppercase font-weight-bolder text-secondary">
+                            Crypto price charts
+                        </h5>
+                        <div className="row">
+                            <svg
+                                onMouseEnter={handleHover}
+                                ref={svgRef}
+                                className="mx-3 mb-3 border-0 mx-md-0 col-md-6 card rounded-0 shadow chart__card btc__eth__chart"
+                            ></svg>
+                            <div className="col-md-6">
+                                <div className="card rounded-0 shadow chart__card ltc__bcc__chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </React.Fragment>
+    );
+};
+
+<div className="card rounded-0 border-0 p-4 shadow card__rounded__smooth">
+                        <b className="mb-3 font-weight-bolder text-secondary">
+                            Quick Transaction
+                        </b>
+                        <div className="d-flex justify-content-between">
+                            <button className="btn mr-2 auth__bg__outline__dark">
+                                Send To wallet
+                            </button>
+                            <div className="mt-2">
+                                <b className="font-weight-bolder">Receive</b>
+                            </div>
+                        </div>
+                        <br />
+                        <hr />
+                        <form>
+                            <TextInput
+                                type="text"
+                                id="wallet"
+                                label="Wallet Address"
+                                name="wallet_address"
+                                onChange={handleChange}
+                                // value={login.email}
+                            />
+                            <button className="send__button btn-block text-white">
+                                Process Request
+                            </button>
+                        </form>
+                    </div>
+
+export default Dashboard;
