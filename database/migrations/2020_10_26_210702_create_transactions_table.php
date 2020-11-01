@@ -15,6 +15,14 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->double('amount');
+            $table->string('address');
+            $table->boolean('status');
+            $table->string('type')->default('Deposit');
+            $table->string('currency');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->timestamps();
         });
     }

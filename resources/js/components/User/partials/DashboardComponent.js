@@ -10,9 +10,9 @@ const DashboardComponent = ({ user }) => {
         return data;
     };
 
-    const { data } = useQuery("cryptodata", Crypto, {
-        refetchOnWindowFocus: false
-    });
+    const { data } = useQuery("crypto", Crypto);
+
+    console.log(data);
 
     return (
         <React.Fragment>
@@ -55,12 +55,12 @@ const DashboardComponent = ({ user }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {data?.data.map(data => {
+                                {data?.data.map(i => {
                                     return (
-                                        <tr key={data.id}>
+                                        <tr key={i.id}>
                                             <td className="d-flex">
                                                 <img
-                                                    src={data.logo_url}
+                                                    src={i.logo_url}
                                                     alt=""
                                                     className="img-fluid mr-2"
                                                     style={{
@@ -70,13 +70,13 @@ const DashboardComponent = ({ user }) => {
                                                 />
                                                 <div className="d-flex flex-column">
                                                     <b className="mr-3">
-                                                        {data.currency === "BTC"
+                                                        {i.currency === "BTC"
                                                             ? "Bitcoin"
                                                             : data.currency ===
                                                               "ETH"
                                                             ? "Ethereum"
                                                             : "Litecoin"}
-                                                        [{data.currency}]
+                                                        [{i.currency}]
                                                     </b>
                                                     <b className="mr-3">
                                                         <small className="text-secondary">
@@ -85,7 +85,7 @@ const DashboardComponent = ({ user }) => {
                                                         &nbsp;
                                                         <small className="text-secondary mt-0 font-weight-bolder">
                                                             $
-                                                            {data.market_cap.substr(
+                                                            {i.market_cap.substr(
                                                                 0,
                                                                 data.currency ===
                                                                     "BTC"
@@ -100,9 +100,7 @@ const DashboardComponent = ({ user }) => {
                                             <td>
                                                 <b className="text-secondary">
                                                     $
-                                                    {Number(data.price).toFixed(
-                                                        2
-                                                    )}
+                                                    {Number(i.price).toFixed(2)}
                                                 </b>
                                             </td>
                                             <td>
@@ -110,7 +108,7 @@ const DashboardComponent = ({ user }) => {
                                                     className={`
                                                         ${
                                                             Math.sign(
-                                                                data["1d"]
+                                                                i["1d"]
                                                                     .price_change_pct
                                                             ) === 1
                                                                 ? "text-success"
@@ -119,7 +117,7 @@ const DashboardComponent = ({ user }) => {
                                                     `}
                                                 >
                                                     {Number(
-                                                        data["1d"]
+                                                        i["1d"]
                                                             .price_change_pct *
                                                             100
                                                     ).toFixed(2)}
@@ -144,7 +142,7 @@ const DashboardComponent = ({ user }) => {
                     </p>
                     <NavLink to="/product/fixed-earning">
                         <div
-                            className="card bg-secondary text-white border-0 shadow p-3"
+                            className="card bg-light border-0 shadow p-3"
                             style={{ borderRadius: "10px" }}
                         >
                             <div className="d-flex justify-content-between">
@@ -175,7 +173,7 @@ const DashboardComponent = ({ user }) => {
                             <h5 className="">
                                 <b>FIXED ROI</b>
                             </h5>
-                            <p className="text-white">
+                            <p className="text-dark">
                                 Choose your lock-up period on your own terms.
                             </p>
                         </div>

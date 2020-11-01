@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import { FaInfoCircle } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-import SelectInput from "../../Auth/common/SelectInput";
 
 const Deposit = () => {
     const [condition, setCondition] = useState("Copy and process request");
@@ -20,14 +19,6 @@ const Deposit = () => {
 
     return (
         <React.Fragment>
-            <div className="d-flex justify-content-between mt-4 mt-md-1 show">
-                <NavLink to="/dashboard">
-                    <BsArrowLeft className="h5" />
-                </NavLink>
-                <h5>Deposit</h5>
-                <h4 className="text-white">.</h4>
-            </div>
-            <br />
             <h3 className="text-center mt-md-4 mb-md-5 font-weight-bolder">
                 Make Deposit
             </h3>
