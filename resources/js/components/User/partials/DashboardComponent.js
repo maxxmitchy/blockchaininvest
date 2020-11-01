@@ -2,20 +2,17 @@ import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import { GrNotification } from "react-icons/gr";
 import { NavLink } from "react-router-dom";
-import SvgRep from "./SvgRep";
+import { useQuery } from "react-query";
 
 const DashboardComponent = ({ user }) => {
-    const [pctdata, setPctdata] = useState([]);
+    const Crypto = async () => {
+        let data = await axios.get("api/endpointpct");
+        return data;
+    };
 
-    useEffect(() => {
-        Axios.get("api/endpointpct").then(res => {
-            setPctdata(res.data);
-        });
-    }, []);
-
-    const handleChange = e => {};
-
-    console.log(pctdata);
+    const { data } = useQuery("cryptodata", Crypto, {
+        refetchOnWindowFocus: false
+    });
 
     return (
         <React.Fragment>
@@ -43,23 +40,22 @@ const DashboardComponent = ({ user }) => {
                 </div>
             </div>
             <div className="row">
-                <div className="col-md-8">
+                <div className="col-md-7">
                     <br />
                     <h5 className="font-weight-bolder mb-3">
                         Marketcap (24HR CHANGE)
                     </h5>
                     <div className="table-responsive mb-3">
-                        <table className="table border">
-                            <thead className="thead-dark py-0">
+                        <table className="table">
+                            <thead className="thead-light py-0">
                                 <tr>
                                     <th scope="col">Currency</th>
                                     <th scope="col">Last Price</th>
                                     <th scope="col">Change</th>
-                                    <th scope="col">Last 24hrs</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {pctdata?.map(data => {
+                                {data?.data.map(data => {
                                     return (
                                         <tr key={data.id}>
                                             <td className="d-flex">
@@ -95,7 +91,7 @@ const DashboardComponent = ({ user }) => {
                                                                     "BTC"
                                                                     ? 3
                                                                     : 2
-                                                            )}{" "}
+                                                            )}
                                                             B
                                                         </small>
                                                     </b>
@@ -130,7 +126,6 @@ const DashboardComponent = ({ user }) => {
                                                     %
                                                 </b>
                                             </td>
-                                            <td><SvgRep/></td>
                                         </tr>
                                     );
                                 })}
@@ -138,9 +133,53 @@ const DashboardComponent = ({ user }) => {
                         </table>
                     </div>
                 </div>
-                <div className="col-md-4">
-                    <br />
-                    <br />
+                <div className="col-md-5 mt-4">
+                    <h5 className="font-weight-bolder text-capitalize">
+                        Earn on blockchainfinancial
+                    </h5>
+                    <p className="text-secondary">
+                        Our experts trade your crypto assets for a specified
+                        period of time, while you earn in compound interest
+                        daily.
+                    </p>
+                    <NavLink to="/product/fixed-earning">
+                        <div
+                            className="card bg-secondary text-white border-0 shadow p-3"
+                            style={{ borderRadius: "10px" }}
+                        >
+                            <div className="d-flex justify-content-between">
+                                <div className="d-flex">
+                                    <img
+                                        src="img/icon-btc.svg"
+                                        className="img-fluid mr-2"
+                                        style={{
+                                            width: "30px",
+                                            height: "20px"
+                                        }}
+                                        alt=""
+                                    />
+                                    <img
+                                        src="img/icon-eth.svg"
+                                        className="img-fluid"
+                                        style={{
+                                            width: "30px",
+                                            height: "20px"
+                                        }}
+                                        alt=""
+                                    />
+                                </div>
+                                <h6 className="rounded p-2 light__primary__bg">
+                                    365 Days
+                                </h6>
+                            </div>
+                            <h5 className="">
+                                <b>FIXED ROI</b>
+                            </h5>
+                            <p className="text-white">
+                                Choose your lock-up period on your own terms.
+                            </p>
+                        </div>
+                    </NavLink>
                 </div>
             </div>
         </React.Fragment>

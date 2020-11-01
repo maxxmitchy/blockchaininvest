@@ -71,3 +71,31 @@ Continue
 }
 
 export default Withdraw
+
+
+
+
+
+
+
+
+<h3 className="hide mb-md-3 text-uppercase">
+                        Make Quick Deposit
+                    </h3>
+                    <p className="text-secondary">
+                        Invest today and become eligible for withdrawal in
+                        15days. You get 9% of your investment as profit
+                        everyday.
+                    </p>
+                    <form>
+                        <SelectInput
+                            name="currency"
+                            label=""
+                            defaultOption="BITCOIN"
+                            options={[{ id: 1, name: "BITCOIN" }].map(item => ({
+                                value: item.name,
+                                text: item.name
+                            }))}
+                            onChange={handleChange}
+                        />
+                    </form>

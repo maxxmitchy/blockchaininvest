@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import { FaInfoCircle } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
@@ -7,8 +7,11 @@ import SelectInput from "../../Auth/common/SelectInput";
 const Deposit = () => {
     const [condition, setCondition] = useState("Copy and process request");
 
+    let inputRef = useRef(null);
+
     const handleClick = () => {
-        condition !== "copied" && myInp.select();
+        inputRef.current.select();
+        condition !== "Address copied" && myInp.select();
         document.execCommand("Copy");
         setCondition("Address Copied");
     };
@@ -25,32 +28,22 @@ const Deposit = () => {
                 <h4 className="text-white">.</h4>
             </div>
             <br />
-            <h3 className="hide mb-md-3 text-uppercase">Make Quick Deposit</h3>
+            <h3 className="text-center mt-md-4 mb-md-5 font-weight-bolder">
+                Make Deposit
+            </h3>
             <div className="row">
-                <div className="col-md-6">
-                    <form>
-                        <SelectInput
-                            name="currency"
-                            label=""
-                            defaultOption="BITCOIN"
-                            options={[{ id: 1, name: "BITCOIN" }].map(item => ({
-                                value: item.name,
-                                text: item.name
-                            }))}
-                            onChange={handleChange}
-                        />
-                    </form>
+                <div className="col-md-6 ">
                     <div className="d-flex flex-column justify-content-center align-items-center">
                         <img className="img-fluid mt-3" src="img/scan.png" />
                     </div>
                     <input
                         type="text"
                         value="1P5mw1q4RNNWxEx1a8MfbcUvXMydxva35H"
-                        className="bg-white form-control text-center my-2"
+                        className="bg-white w-100 my-2"
                         style={{ border: "none", outline: "none" }}
-                        disabled={true}
                         onChange={handleChange}
                         id="myInp"
+                        ref={inputRef}
                     />
                     <div className="d-flex justify-content-center align-items-center">
                         <button
@@ -62,13 +55,11 @@ const Deposit = () => {
                         </button>
                     </div>
                     <br />
-                    Invest today and become eligible for withdrawal in 15days.
-                    You get 9% of your investment as profit everyday.
                 </div>
-                <div className="col-md-4 offset-md-1 mt-4 mt-md-1">
+                <div className="col-md-6 mt-5 mt-md-1">
                     <div className="d-flex text-danger ml-md-4">
                         <FaInfoCircle className="mr-1 mt-1" />
-                        <p>Important !!!</p>
+                        <h4>Important !!!</h4>
                     </div>
                     <ul>
                         <li>

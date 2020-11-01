@@ -51,11 +51,9 @@ const Navbar = () => {
                 <NavLink to="/dashboard">Dashboard</NavLink>
             </li>
             <li>
-                <a className="text-white">
-                    <small>
-                        <FaUser className="mb-1" />
-                    </small>
-                </a>
+                <NavLink to="/user-profile">
+                    <FaUser className="mb-1" /> Profile
+                </NavLink>
             </li>
         </React.Fragment>
     );

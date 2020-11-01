@@ -167,38 +167,27 @@ const FixedEarning = () => {
                         </b>{" "}
                         to your investment.
                     </b>
-                    <div className="row my-3">
-                        <div
-                            className="col-md-6 mb-3"
+                    <div className="d-flex py-3">
+                        <button
                             onClick={() =>
                                 setFixedEarn({ ...fixedEarn, currency: "BTC" })
                             }
+                            className="btn primary__bg text-white mr-3"
                         >
-                            <div className="card text-left border-0 shadow primary__bg text-white">
-                                <div className="card-body d-flex flex-column justify-content-between">
-                                    <h6>BITCOIN (BTC)</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div
-                            className="col-md-6"
+                            BITCOIN
+                        </button>
+                        <button
                             onClick={() =>
                                 setFixedEarn({ ...fixedEarn, currency: "ETH" })
                             }
-                        >
-                            <div className="card text-left border-0 shadow light__primary__bg primary__color">
-                                <div className="card-body d-flex flex-column justify-content-between">
-                                    <img src="img/icon-eth.svg" alt="" />
-                                    <h6>ETHEREUM (ETH)</h6>
-                                </div>
-                            </div>
-                        </div>
+                            className="btn btn-outline-primary"
+                        >Ethereum</button>
                     </div>
                 </div>
-                <div className="col-md-4 offset-md-1 mt-3 mt-md-1">
-                    <h2 className="mb-3">
-                        <b>Start Investing.</b>
-                    </h2>
+                <div className="col-md-6 mt-3 mt-md-1">
+                    <h5 className="mb-3">
+                        <b>Start Investing Now.</b>
+                    </h5>
                     <SelectInput
                         name="currency"
                         label="Investment Currencies"
@@ -243,20 +232,6 @@ const FixedEarning = () => {
                     </button>
                     <br />
                     <br />
-                </div>
-            </div>
-            <hr />
-            <div className="row mt-4">
-                <div className="col-md-6">
-                    <h2>
-                        <b>Build it on your own, Match your needs.</b>
-                    </h2>
-                    <h5 className="text-secondary">
-                        Only you can decide how much and how long you deposit at
-                        Blockchainfinancial fixed earn. From 15 to 365 days,
-                        choose your lock-up period on your terms. Enjoy earning
-                        with what fits you best.
-                    </h5>
                 </div>
             </div>
         </div>

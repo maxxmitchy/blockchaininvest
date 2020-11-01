@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./users.css";
 import { FaPlus, FaTimes } from "react-icons/fa";
+import { AiOutlineEdit } from "react-icons/ai";
 import AddWallet from "./partials/AddWallet";
 import Withdraw from "./partials/Withdraw";
 import Deposit from "./partials/Deposit";
 import DashboardComponent from "./partials/DashboardComponent";
-import { Invest } from "./partials/Invest";
 import FixedEarning from "./partials/FixedEarning";
+import Profile from "./Profile";
+import { Invest } from "./partials/Invest";
 
 const Dashboard = ({ user, transactions }) => {
-    console.log(transactions);
     const [modal, setModal] = useState({
         open: false,
         component: "",
@@ -42,6 +43,13 @@ const Dashboard = ({ user, transactions }) => {
                 setComponent({
                     ...component,
                     component: <FixedEarning />,
+                    hide: ""
+                });
+                break;
+            case "/user-profile":
+                setComponent({
+                    ...component,
+                    component: <Profile />,
                     hide: ""
                 });
                 break;
@@ -88,7 +96,7 @@ const Dashboard = ({ user, transactions }) => {
             <div className="container mt-5">
                 <div className="row">
                     <div
-                        className={`col-md-3 light__primary__bg py-3 py-md-3 px-md-4 ${component.hide}`}
+                        className={`col-md-4 light__primary__bg py-3 py-md-3 px-md-4 ${component.hide}`}
                         style={{ height: "140vh" }}
                     >
                         <br />
@@ -105,61 +113,73 @@ const Dashboard = ({ user, transactions }) => {
                             Withdraw Funds
                         </button>
                         <br />
-                        <b className="text-uppercase font-weight-bolder">
-                            Your Wallets
-                        </b>
-                        <br />
-                        <br />
-
-                        <div className="-flex justify-content-beteen">
-                            <div className="btc-grid">
-                                <div
-                                    style={{ background: "orange" }}
-                                    className="rounded pt-2 text-white d-flex flex-column justify-content-center align-tems-center"
-                                >
-                                    <p className="text-center">BITCOIN</p>
-                                    <p className="font-weight-bolder text-center">
-                                        {user.btc?.substr(0, 5) ?? "xxxxx"}...
-                                    </p>
-                                    <p className="mb-2 font-weight-bolder text-center">
-                                        {user.roiBTC} btc
-                                    </p>
-                                </div>
-                                <div
-                                    style={{ background: "darkgrey" }}
-                                    className="rounded pt-2 text-white d-flex flex-column justify-content-center align-tems-center"
-                                >
-                                    <p className="text-center">ETHEREUM</p>
-                                    <p className="font-weight-bolder text-center">
-                                        {user.eth?.substr(0, 5) ?? "xxxxx"}...
-                                    </p>
-                                    <p className="mb-2 font-weight-bolder text-center">
-                                        {user.roiETH} eth
-                                    </p>
-                                </div>
-                            </div>
-                            <br />
-                            <div
-                                style={{
-                                    cursor: "pointer",
-                                    boxShadow: "0px 0px 10px #411485",
-                                    width: "45px"
-                                }}
-                                onClick={() =>
-                                    setModal({
-                                        ...modal,
-                                        open: true,
-                                        component: <AddWallet />,
-                                        form: "info"
-                                    })
-                                }
-                                className="d-flex primary__bg text-white mt-2 rounded-circle p-3"
-                            >
-                                <FaPlus />
+                        <div className="">
+                            <div className="">
+                                {[
+                                    {
+                                        id: 1,
+                                        address: user.btc,
+                                        roi: user.roiBTC,
+                                        symbol: "BITCOIN"
+                                    },
+                                    {
+                                        id: 2,
+                                        address: user.eth,
+                                        roi: user.roiETH,
+                                        symbol: "ETHEREUM"
+                                    }
+                                ].map(i => {
+                                    return (
+                                        <div
+                                            className="d-flex justify-content-between"
+                                            key={i.id}
+                                        >
+                                            <div className="d-flex flex-column">
+                                                <b className="font-weight-bold text-secondary mb-0">
+                                                    {i.symbol}
+                                                </b>
+                                                <p className="font-weight-bolder text-secondary mb-0">
+                                                    {i.address ? (
+                                                        i.address
+                                                    ) : (
+                                                        <b>
+                                                            please update wallet
+                                                            address...
+                                                        </b>
+                                                    )}{" "}
+                                                </p>
+                                                <p className="font-weight-bolder text-secondary">
+                                                    ${i.roi}
+                                                </p>
+                                            </div>
+                                            <AiOutlineEdit
+                                                onClick={() =>
+                                                    setModal({
+                                                        ...modal,
+                                                        open: true,
+                                                        component: (
+                                                            <AddWallet
+                                                                currency={
+                                                                    user.symbol ===
+                                                                    "BTC"
+                                                                        ? "Bitcoin"
+                                                                        : "Ethereum"
+                                                                }
+                                                                currentValue={
+                                                                    user.address
+                                                                }
+                                                            />
+                                                        ),
+                                                        form: "info"
+                                                    })
+                                                }
+                                                className="mt-3"
+                                            />
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
-                        <br />
-                        <br />
                         <b className="text-uppercase font-weight-bolder">
                             recent transactions
                         </b>
@@ -167,13 +187,13 @@ const Dashboard = ({ user, transactions }) => {
                             {transactions ? (
                                 <div className="table-responsive mb-3">
                                     <table className="table border">
-                                        <thead className="thead-dark py-0">
+                                        <thead className="thead-light py-0">
                                             <tr>
-                                                <th scope="col">Id</th>
-                                                <th scope="col">Amount</th>
-                                                <th scope="col">Address</th>
-                                                <th scope="col">Currency</th>
                                                 <th scope="col">Type</th>
+                                                <th scope="col">Amount</th>
+                                                <th scope="col">Currency</th>
+                                                <th scope="col">Address</th>
+                                                <th scope="col">Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -181,23 +201,56 @@ const Dashboard = ({ user, transactions }) => {
                                                 return (
                                                     <tr key={transaction.id}>
                                                         <td>
-                                                            {transaction.id}
+                                                            <b
+                                                                className={`${
+                                                                    transaction.type ==
+                                                                    "Deposit"
+                                                                        ? "text-success"
+                                                                        : "text-danger"
+                                                                }`}
+                                                            >
+                                                                {
+                                                                    transaction.type
+                                                                }
+                                                            </b>
                                                         </td>
                                                         <td>
-                                                            {transaction.amount}
+                                                            <b>
+                                                                $
+                                                                {
+                                                                    transaction.amount
+                                                                }
+                                                            </b>
                                                         </td>
                                                         <td>
-                                                            {
-                                                                transaction.address
-                                                            }
+                                                            <b>
+                                                                {
+                                                                    transaction.currency
+                                                                }
+                                                            </b>
                                                         </td>
                                                         <td>
-                                                            {
-                                                                transaction.currency
-                                                            }
+                                                            <b>
+                                                                {transaction.address.substr(
+                                                                    0,
+                                                                    6
+                                                                )}
+                                                                ...
+                                                            </b>
                                                         </td>
                                                         <td>
-                                                            {transaction.type}
+                                                            <b
+                                                                className={`${
+                                                                    transaction.status ===
+                                                                    "pending"
+                                                                        ? "text-danger"
+                                                                        : "text-success"
+                                                                }`}
+                                                            >
+                                                                {
+                                                                    transaction.status
+                                                                }
+                                                            </b>
                                                         </td>
                                                     </tr>
                                                 );
@@ -225,17 +278,10 @@ const Dashboard = ({ user, transactions }) => {
                         </button>
                     </div>
 
-                    <div className="col-md-9 py-md-3 px-md-5">
+                    <div className="col-md-8 py-md-3 px-md-5">
                         {component.component}
-
-                        {location.pathname !== "/product/fixed-earning" ? (
-                            <>
-                                <hr />
-                                <Invest />
-                            </>
-                        ) : (
-                            ""
-                        )}
+                        <hr />
+                        <Invest />
                     </div>
                 </div>
             </div>

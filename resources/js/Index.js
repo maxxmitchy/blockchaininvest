@@ -9,6 +9,7 @@ import About from "./components/HomePage/About";
 import ProtectedRoutes from "./components/Auth/ProtectedRoute";
 import Dashboard from "./components/User/Dashboard";
 import VerifyEmail from "./components/Auth/VerifyEmail";
+import Profile from "./components/User/Profile";
 
 function Index() {
     return (
@@ -31,6 +32,11 @@ if (document.getElementById("index")) {
                 <Route path="/about-us" exact component={About}></Route>
                 <ProtectedRoutes
                     path="/dashboard"
+                    exact
+                    component={Dashboard}
+                ></ProtectedRoutes>
+                <ProtectedRoutes
+                    path="/user-profile"
                     exact
                     component={Dashboard}
                 ></ProtectedRoutes>
