@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { BsArrowLeft } from "react-icons/bs";
-import { FaAngleDown, FaInfoCircle } from "react-icons/fa";
+import { FaAngleDown, FaInfoCircle, FaTimes } from "react-icons/fa";
 import { useQuery } from "react-query";
 
 const Deposit = () => {
@@ -19,30 +18,84 @@ const Deposit = () => {
         amount: ""
     });
 
+    const [modal, setModal] = useState({ open: false, info: "" });
+
     useEffect(() => {
         setDeposit({
             ...deposit,
             currency: data?.data[0].name,
             Image: data?.data[0].image,
-            address: data?.data[0].address
+            address: data?.data[0].value
         });
     }, [data]);
 
     const handleChange = e => {
         let value = e.target.value;
         setDeposit({
+            ...deposit,
             [e.target.name]: value
         });
     };
 
     return (
         <React.Fragment>
+            {modal.open && (
+                <div className="info_modal">
+                    <div className={`bg-white px-2 py-3 info`}>
+                        <FaTimes
+                            className="text-white mt-2"
+                            onClick={() =>
+                                setModal({
+                                    ...modal,
+                                    open: false,
+                                    info: ""
+                                })
+                            }
+                            style={{
+                                position: "absolute",
+                                right: "-.6rem",
+                                top: "-1.5rem",
+                                fontSize: "1em",
+                                cursor: "pointer"
+                            }}
+                        />
+                        <div className="">
+                            <h5 className="text-center font-weight-bolder">
+                                Transaction Preview
+                            </h5>
+                            <p className="text-secondary text-center">
+                                {modal.info}
+                            </p>
+                            <hr />
+                            <p
+                                className="text-center text-secondary mx-2"
+                                style={{ wordWrap: "break-word" }}
+                            >
+                                {deposit.address}
+                            </p>
+                            <hr />
+                            <p className="text-secondary text-center">
+                                ${deposit.amount}
+                            </p>
+                            <hr />
+                            <div className="d-flex justify-content-center align-items-center">
+                                <button className="btn btn-success py-0">
+                                    Process Deposit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
             <h3 className="text-center my-4 mb-md-5 font-weight-bolder">
                 Make Deposit
             </h3>
 
             <div className="row">
                 <div className="col-md-6">
+                    {deposit.errors && (
+                        <p className="text-danger">{deposit.errors}</p>
+                    )}
                     <div
                         onClick={() => {
                             setDeposit({ ...deposit, open: !deposit.open });
@@ -116,7 +169,19 @@ const Deposit = () => {
                     <div className="d-flex justify-content-center align-items-center">
                         <button
                             id="myBut"
-                            // onClick={handleClick}
+                            onClick={() => {
+                                deposit.amount
+                                    ? setModal({
+                                          ...modal,
+                                          open: true,
+                                          info: `Send ${deposit.currency} (BTC) to the wallet address below. The correct amount should be sent to avoid interruption in the pool.`
+                                      })
+                                    : setDeposit({
+                                          ...deposit,
+                                          errors:
+                                              "deposit amount cannot be empty."
+                                      });
+                            }}
                             className="btn-block deposit_button text-white"
                         >
                             Process Request
@@ -130,8 +195,9 @@ const Deposit = () => {
                     </div>
                     <ul>
                         <li>
-                            Send only {deposit.currency} to this deposit address. Sending other
-                            coins may result in the loss of your crypto asset.
+                            Send only {deposit.currency} to this deposit
+                            address. Sending other coins may result in the loss
+                            of your crypto asset.
                         </li>
                         <li>
                             Deposit wallet address can change. Make sure to
