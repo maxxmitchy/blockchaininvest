@@ -20,7 +20,6 @@ const AddWallet = ({ currency, currentValue }) => {
 
     const addWalletFunc = async data => {
         await axios.patch("/api/editUser", data);
-        setWallet({ name: "", address: "" });
     };
 
     const [mutate, someinfo] = useMutation(addWalletFunc, {
@@ -37,12 +36,18 @@ const AddWallet = ({ currency, currentValue }) => {
     };
 
     return (
-        <div className="container pt-4">
+        <div className="container pt-2">
+            <div className="mb-3">
+                <h5>Update {wallet.name} Address</h5>
+                <p className="text-secondary">
+                    please cross-check to ensure you put in the correct details.
+                </p>
+            </div>
             <form>
                 <TextInput
                     type="text"
                     id="address"
-                    label="Wallet Address"
+                    label="Enter Wallet Address"
                     name="address"
                     onChange={handleChange}
                     value={wallet.address}

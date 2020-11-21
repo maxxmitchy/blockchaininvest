@@ -1,14 +1,23 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import TextInput from "./common/TextInput";
-import { useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { NavLink, Redirect } from "react-router-dom";
 import { MdErrorOutline } from "react-icons/md";
 
-const Login = () => {
-    let redirectTo = location.state && location.state.from.pathname;
+const Login = ({location}) => {
+    let redirectTo = location?.state && location.state.from.pathname;
+
+    const [status, setStatus] = useState(false);
+
+    const [login, setLogin] = useState({
+        email: "",
+        password: ""
+    });
+
+    const inputRef = useRef(null);
 
     const userLogin = async () => {
-        await axios.get("/sanctum/csrf-cookie").then(response => {
+        await axios.get("/sanctum/csrf-cookie").then(() => {
             return axios.post("/api/login", { ...login }).then(res => {
                 localStorage.setItem(
                     "token",
@@ -18,13 +27,6 @@ const Login = () => {
         });
     };
 
-    const [login, setLogin] = useState({
-        email: "",
-        password: ""
-    });
-
-    const [enable, setEnable] = useState(false);
-
     const handleChange = e => {
         let value = e.target.value;
         setLogin({
@@ -32,10 +34,6 @@ const Login = () => {
             [e.target.name]: value
         });
     };
-
-    const [status, setStatus] = useState(false);
-
-    const inputRef = useRef(null);
 
     const handlePassword = () => {
         if (inputRef.current.type === "password") {
@@ -47,37 +45,17 @@ const Login = () => {
         }
     };
 
-    const isVerified = async () => {
-        await axios.get("/api/email/verify");
-    };
-
-    const { isSuccess, error } = useQuery("login", userLogin, {
-        enabled: enable,
-        refetchOnWindowFocus: false
-    });
-
-    const info = useQuery("verify", isVerified, {
-        enabled: isSuccess || localStorage.getItem("token"),
-        retry: 2,
-        retryDelay: 1000
-    });
+    const [
+        mutate,
+        { isIdle, isLoading, isError, isSuccess, error }
+    ] = useMutation(userLogin);
 
     const handleSubmit = e => {
         e.preventDefault();
-        setEnable(!enable);
+        mutate();
     };
 
-    useEffect(() => {
-        let clear = setTimeout(() => {
-            setEnable(false);
-        }, 3000);
-        if (enable) clear;
-        return () => {
-            clearTimeout(clear);
-        };
-    }, [enable]);
-
-    if (info.isSuccess && localStorage.getItem("token")) {
+    if (localStorage.getItem("token")) {
         return (
             <Redirect
                 to={redirectTo !== undefined ? redirectTo : "/dashboard"}
@@ -139,8 +117,12 @@ const Login = () => {
                 <br />
                 <br />
                 <div className="col-md-12">
-                    <button style={{borderRadius:"10px"}} className="btn btn-block text-white auth__bg__dark">
-                        Login Account
+                    <button
+                        disabled={isLoading}
+                        style={{ borderRadius: "10px" }}
+                        className="btn btn-block text-white auth__bg__dark"
+                    >
+                        {isLoading ? "please wait..." : "Login Account"}
                     </button>
                 </div>
                 <div className="col-md-12">

@@ -1,6 +1,6 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { FaAngleDown, FaInfoCircle, FaTimes } from "react-icons/fa";
-import { useQuery } from "react-query";
+import { useQuery, useMutation, useQueryCache } from "react-query";
 
 const Deposit = () => {
     const getWallets = async () => {
@@ -15,10 +15,33 @@ const Deposit = () => {
         currency: "",
         address: "",
         Image: "",
-        amount: ""
+        amount: "",
+        range: 15,
+        type: "Deposit",
+        errors: ""
     });
 
     const [modal, setModal] = useState({ open: false, info: "" });
+
+    const storeDeposit = async data => {
+        await axios.post("/api/storedeposit", data);
+    };
+
+    const queryCache = useQueryCache();
+
+    const [mutate, someinfo] = useMutation(storeDeposit, {
+        onSuccess: () => {
+            // Query Invalidations
+            queryCache.invalidateQueries("login");
+        }
+    });
+
+    const processTransact = async e => {
+        e.preventDefault();
+        try {
+            await mutate(deposit);
+        } catch (e) {}
+    };
 
     useEffect(() => {
         setDeposit({
@@ -27,7 +50,22 @@ const Deposit = () => {
             Image: data?.data[0].image,
             address: data?.data[0].value
         });
-    }, [data]);
+    }, [data, !deposit.currency]);
+
+    useEffect(() => {
+        if (deposit.error !== "") {
+            let timer = setTimeout(() => {
+                setDeposit({
+                    ...deposit,
+                    errors: ""
+                });
+                timer;
+            }, 2000);
+            return () => {
+                clearTimeout(timer);
+            };
+        }
+    }, [deposit.errors]);
 
     const handleChange = e => {
         let value = e.target.value;
@@ -43,7 +81,7 @@ const Deposit = () => {
                 <div className="info_modal">
                     <div className={`bg-white px-2 py-3 info`}>
                         <FaTimes
-                            className="text-white mt-2"
+                            className="text-white mt-2 fa-times"
                             onClick={() =>
                                 setModal({
                                     ...modal,
@@ -51,15 +89,13 @@ const Deposit = () => {
                                     info: ""
                                 })
                             }
-                            style={{
-                                position: "absolute",
-                                right: "-.6rem",
-                                top: "-1.5rem",
-                                fontSize: "1em",
-                                cursor: "pointer"
-                            }}
                         />
                         <div className="">
+                            {someinfo.status === "success" && (
+                                <p className="text-success text-center">
+                                    Deposit successful
+                                </p>
+                            )}
                             <h5 className="text-center font-weight-bolder">
                                 Transaction Preview
                             </h5>
@@ -67,19 +103,22 @@ const Deposit = () => {
                                 {modal.info}
                             </p>
                             <hr />
-                            <p
-                                className="text-center text-secondary mx-2"
+                            <h5
+                                className="text-center font-weight-bolder mx-2"
                                 style={{ wordWrap: "break-word" }}
                             >
                                 {deposit.address}
-                            </p>
+                            </h5>
                             <hr />
-                            <p className="text-secondary text-center">
-                                ${deposit.amount}
-                            </p>
+                            <h5 className="font-weight-bolder text-center">
+                                usd {deposit.amount}
+                            </h5>
                             <hr />
                             <div className="d-flex justify-content-center align-items-center">
-                                <button className="btn btn-success py-0">
+                                <button
+                                    onClick={processTransact}
+                                    className="btn primary__bg text-white "
+                                >
                                     Process Deposit
                                 </button>
                             </div>
@@ -87,9 +126,17 @@ const Deposit = () => {
                     </div>
                 </div>
             )}
-            <h3 className="text-center my-4 mb-md-5 font-weight-bolder">
+            <h3 className="text-center mt-4 font-weight-bolder">
                 Make Deposit
             </h3>
+            <p className="text-secondary mb-4 text-center mb-md-5">
+                Invest in the cryptocurrency of your choice and start earening a
+                daily return on investment depending on your invested amount.
+                Please note that investment through this channel runs for a
+                period of 15days minimum. You can withdraw your profit at any
+                time. Withdrawal of your invested amount plus profit is after
+                your specified period of investment.
+            </p>
 
             <div className="row">
                 <div className="col-md-6">
@@ -129,7 +176,11 @@ const Deposit = () => {
                                                 Image: i.image
                                             });
                                         }}
-                                        className="d-flex my-2 currency_select py-2 rounded"
+                                        className={`d-flex my-2 currency_select py-2 rounded ${
+                                            deposit.currency === i.name
+                                                ? "currency_sel"
+                                                : ""
+                                        }`}
                                         key={i.id}
                                     >
                                         <img
@@ -160,21 +211,40 @@ const Deposit = () => {
                         value={deposit.amount}
                         placeholder="please enter deposit amount e.g., 1000"
                     />
+                    <div className="range-slider mt-4">
+                        <input
+                            name="range"
+                            className="range-slider__range"
+                            type="range"
+                            value={deposit.range}
+                            onChange={handleChange}
+                            min="15"
+                            max="365"
+                        />
+                        <span className="range-slider__value">{`${deposit.range}days`}</span>
+                    </div>
                     <div className="d-flex justify-content-center align-items-center">
                         <img
                             className="img-fluid mt-3  shadow rounded p-2 bg-white mb-3"
                             src="img/scan.png"
                         />
                     </div>
+
                     <div className="d-flex justify-content-center align-items-center">
                         <button
                             id="myBut"
                             onClick={() => {
-                                deposit.amount
+                                deposit.amount && deposit.amount >= 100
                                     ? setModal({
                                           ...modal,
                                           open: true,
-                                          info: `Send ${deposit.currency} (BTC) to the wallet address below. The correct amount should be sent to avoid interruption in the pool.`
+                                          info: `Send ${deposit.currency} to the wallet address below. The correct amount should be sent to avoid interruption in the pool.`
+                                      })
+                                    : deposit.amount < 100
+                                    ? setDeposit({
+                                          ...deposit,
+                                          errors:
+                                              "deposit amount cannot be less than $100."
                                       })
                                     : setDeposit({
                                           ...deposit,
@@ -189,6 +259,13 @@ const Deposit = () => {
                     </div>
                 </div>
                 <div className="col-md-6 mt-5 mt-md-1">
+                    <div className="mb-3 bg-light p-2 rounded">
+                        <h6 className="text-secondary">
+                            For a more accurate return on investment, choose an
+                            invesment period that best suits your income
+                            schedule.
+                        </h6>
+                    </div>
                     <div className="d-flex text-danger ml-md-4">
                         <FaInfoCircle className="mr-1 mt-1" />
                         <h5>Important !!!</h5>

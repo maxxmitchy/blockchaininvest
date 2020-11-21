@@ -1,12 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Redirect, Route } from "react-router-dom";
-import { useQuery } from "react-query";
+import useUserData from "../customHooks/useUserData";
 
 const ProtectedRoutes = ({ component: Component, isAdmin, ...rest }) => {
-    const isVerified = async () => {
-        const data = await axios.get("/api/email/verify");
-        return data;
-    };
+    let verification = useUserData();
 
     const userLogout = async () => {
         await axios.get("/sanctum/csrf-cookie").then(response => {
@@ -17,27 +14,11 @@ const ProtectedRoutes = ({ component: Component, isAdmin, ...rest }) => {
         });
     };
 
-    const { data } = useQuery("login", isVerified);
-
-    const { isSuccess, refetch } = useQuery("logout", userLogout, {
-        enabled: data?.data.user === null && localStorage.getItem("token")
-    });
-
-    // if (isAdmin !== undefined && isVerified !== "") {
-    //     if (isAdmin != role) {
-    //         return <Redirect to="/dashboard" />;
-    //     }
-    // }
-
     return (
         <Route
             {...rest}
             render={props => {
-                if (
-                    !data?.data.verified &&
-                    (!localStorage.getItem("token") ||
-                        !localStorage.getItem("token").length === 244)
-                ) {
+                if (!verification?.verified && !localStorage.getItem("token")) {
                     return (
                         <Redirect
                             to={{
@@ -49,17 +30,24 @@ const ProtectedRoutes = ({ component: Component, isAdmin, ...rest }) => {
                         />
                     );
                 }
-
-                if (data?.data.verified !== "") {
-                    switch (data?.data.verified) {
+                if (verification?.verified !== "") {
+                    switch (verification?.verified) {
                         case true:
                             return (
-                                <Component transactions={data?.data.transactions} user={data?.data.user} {...props} />
+                                <Component
+                                    transactions={verification?.transactions}
+                                    user={verification?.user}
+                                    allTransactions={
+                                        verification?.allTransactions
+                                    }
+                                    {...props}
+                                />
                             );
                         case false:
                             return <Redirect to="/verifyEmail" />;
                     }
                 }
+                if (verification?.verify === null) userLogout();
             }}
         />
     );

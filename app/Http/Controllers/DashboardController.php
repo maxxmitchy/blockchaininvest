@@ -35,7 +35,7 @@ class DashboardController extends Controller
         curl_close($curl);
 
         if ($err) {
-            echo "cURL Error #:" . $err;
+            return response([]);
         } else {
             return response($response);
         }
@@ -68,7 +68,7 @@ class DashboardController extends Controller
         curl_close($curl);
 
         if ($err) {
-            echo "cURL Error #:" . $err;
+            return response([$err]);
         } else {
             return response($response);
         }

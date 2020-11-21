@@ -18,9 +18,15 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
-        User::find(auth()->id())->update([
-            'btc' => $request->address,
-        ]);
+        if ($request->name === "Bitcoin") {
+            User::find(auth()->id())->update([
+                'btc' => $request->address,
+            ]);
+        }
+        $request->name === "Ethereum" ? User::find(auth()->id())->update([
+            'eth' => $request->address,
+        ]) : false;
+
 
         return response(['done now']);
     }

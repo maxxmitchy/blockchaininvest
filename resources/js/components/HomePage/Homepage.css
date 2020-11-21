@@ -2,7 +2,7 @@
     --primary: #411485;
     --light-primary: #0f002417;
     --secondary: #e1e3e6;
-    --tertiary: rgb(82, 206, 11);
+    --tertiary: #000;
     --white: #fff;
     --black: #000;
     --indicator: #ff7900;
@@ -50,7 +50,7 @@
 .range-slider__range {
     -webkit-appearance: none;
     width: calc(100% - (83px));
-    height: 10px;
+    height: 6px;
     border-radius: 5px;
     background: #d7dcdf;
     outline: none;
@@ -60,23 +60,23 @@
 .range-slider__range::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 20px;
-    height: 20px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
-    background: var(--tertiary);
+    background: #000;
     cursor: pointer;
     -webkit-transition: background 0.15s ease-in-out;
     transition: background 0.15s ease-in-out;
 }
 .range-slider__range::-webkit-slider-thumb:hover {
-    background: #1abc9c;
+    background: #000;
 }
 .range-slider__range:active::-webkit-slider-thumb {
-    background: #1abc9c;
+    background: #000;
 }
 .range-slider__range::-moz-range-thumb {
     width: 20px;
-    height: 15px;
+    height: 8px;
     border: 0;
     border-radius: 50%;
     background: #2c3e50;
@@ -85,10 +85,10 @@
     transition: background 0.15s ease-in-out;
 }
 .range-slider__range::-moz-range-thumb:hover {
-    background: #1abc9c;
+    background: #000;
 }
 .range-slider__range:active::-moz-range-thumb {
-    background: #1abc9c;
+    background: #000;
 }
 .range-slider__range:focus::-webkit-slider-thumb {
     box-shadow: 0 0 0 3px #fff, 0 0 0 6px #1abc9c;
@@ -99,10 +99,10 @@
     position: relative;
     width: 70px;
     color: #fff;
-    line-height: 20px;
+    line-height: 18px;
     text-align: center;
     border-radius: 3px;
-    background: var(--tertiary);
+    background: #000;
     padding: 5px 10px;
     margin-left: 8px;
 }
@@ -113,7 +113,7 @@
     width: 0;
     height: 0;
     border-top: 7px solid transparent;
-    border-right: 7px solid var(--tertiary);
+    border-right: 7px solid #000;
     border-bottom: 7px solid transparent;
     content: "";
 }

@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlanController;
+use App\Http\Controllers\WalletController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,7 @@ Route::post('storedeposit', ['\App\Http\Controllers\TransactionController', 'sto
 Route::patch('editUser', ['\App\Http\Controllers\UserController', 'update']);
 Route::resources([
     'plans' => PlanController::class,
+    'wallets' => WalletController::class,
 ]);
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {

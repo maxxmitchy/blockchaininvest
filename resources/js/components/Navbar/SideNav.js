@@ -7,15 +7,9 @@ import { FaRegRegistered } from "react-icons/fa";
 import { BsQuestionCircle } from "react-icons/bs";
 import { FiLogIn } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
-import { useQuery } from "react-query";
+import { useMutation } from "react-query";
 
 const SideNav = ({ control, open, auth }) => {
-    const [logout, setLogout] = useState(false);
-
-    useEffect(() => {
-        if (logout) refetch();
-    }, [logout]);
-
     const userLogout = async () => {
         await axios.get("/sanctum/csrf-cookie").then(response => {
             return axios.post("/api/logout").then(res => {
@@ -24,10 +18,10 @@ const SideNav = ({ control, open, auth }) => {
             });
         });
     };
-
-    const { refetch } = useQuery("logout", userLogout, {
-        enabled: logout
-    });
+    const [
+        mutate,
+        { isIdle, isLoading, isError, isSuccess, error }
+    ] = useMutation(userLogout);
 
     return (
         <div
@@ -129,10 +123,10 @@ const SideNav = ({ control, open, auth }) => {
                     <div className="d-flex ml-3 mt-3">
                         <AiOutlineLogout className="bg-white p-2 h2 rounded-circle font-weight-bolder mr-4" />
                         <h6
-                            onClick={() => setLogout(!logout)}
+                            onClick={() => mutate()}
                             className="mt-2 text-dark h6 font-weight-bolder"
                         >
-                            Logout
+                            {isLoading || isSuccess ? "logging user out..." : "Logout"}
                         </h6>
                     </div>
                 </React.Fragment>

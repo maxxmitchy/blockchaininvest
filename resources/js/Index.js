@@ -7,7 +7,7 @@ import Navbar from "./components/Navbar/Navbar";
 import Auth from "./components/Auth/Auth";
 import About from "./components/HomePage/About";
 import ProtectedRoutes from "./components/Auth/ProtectedRoute";
-import Dashboard from "./components/User/Dashboard";
+import User from "./components/User/User";
 import VerifyEmail from "./components/Auth/VerifyEmail";
 import Profile from "./components/User/Profile";
 
@@ -32,23 +32,20 @@ if (document.getElementById("index")) {
                 <Route path="/about-us" exact component={About}></Route>
                 <ProtectedRoutes
                     path="/dashboard"
+                    location="/dashboard"
                     exact
-                    component={Dashboard}
+                    component={User}
                 ></ProtectedRoutes>
                 <ProtectedRoutes
-                    path="/user-profile"
+                    path="/profile"
                     exact
-                    component={Dashboard}
+                    component={User}
                 ></ProtectedRoutes>
                 <ProtectedRoutes
                     path="/deposit"
+                    location="/deposit"
                     exact
-                    component={Dashboard}
-                ></ProtectedRoutes>
-                <ProtectedRoutes
-                    path="/product/fixed-earning"
-                    exact
-                    component={Dashboard}
+                    component={User}
                 ></ProtectedRoutes>
                 <Route
                     path="/verifyEmail"

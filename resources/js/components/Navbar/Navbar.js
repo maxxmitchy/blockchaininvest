@@ -4,16 +4,16 @@ import { FiBell } from "react-icons/fi";
 import { FaBars, FaTimes, FaUser } from "react-icons/fa";
 import SideNav from "./SideNav";
 import "./Nav.css";
-import { useQuery } from "react-query";
+import useUserData from "../customHooks/useUserData";
 
 const Navbar = () => {
-    const [toggleProfile, setToggleProfile] = useState(false);
-
     const [openNav, setOpenNav] = useState("sidenav_transform");
 
     let fadeOut = "fadeOutLeft animate__animated";
 
     let fadeIn = "fadeInLeft animate__animated";
+
+    let verification = useUserData(); //returns response from verifiesEmail.php
 
     const handleSidenav = () => {
         openNav !== fadeIn ? setOpenNav(fadeIn) : setOpenNav(fadeOut);
@@ -58,16 +58,13 @@ const Navbar = () => {
         </React.Fragment>
     );
 
-    const isVerified = async () => {
-        const data = await axios.get("/api/email/verify");
-        return data;
-    };
-
-    const { data } = useQuery("login", isVerified);
-
     return (
         <header className="toolbar">
-            <SideNav auth={data?.data} control={handleSidenav} open={openNav} />
+            <SideNav
+                auth={verification}
+                control={handleSidenav}
+                open={openNav}
+            />
             <nav className="toolbar_navigation container">
                 <img
                     src="img/LOGO.svg"
@@ -89,7 +86,7 @@ const Navbar = () => {
                         <li>
                             <NavLink to="/how-it-works">How It Works</NavLink>
                         </li>
-                        {data?.data.verified ? Auth : noAuth}
+                        {verification?.verified ? Auth : noAuth}
                     </ul>
                 </div>
                 <React.Fragment>
@@ -126,48 +123,6 @@ const Navbar = () => {
                     )}
                 </React.Fragment>
             </nav>
-            {toggleProfile && (
-                <React.Fragment>
-                    <div className="backdrop" onClick={handleProfile}></div>
-                    <div
-                        initial={{ y: -455 }}
-                        animate={{ y: 5 }}
-                        transition={{
-                            duration: 0.4
-                        }}
-                        exit={{ y: -455 }}
-                        className="profile shadow bg-white p-2"
-                    >
-                        <ul>
-                            <li>
-                                <NavLink
-                                    to="/profile"
-                                    exact
-                                    onClick={handleProfile}
-                                >
-                                    User Profile
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink
-                                    to="/messages"
-                                    exact
-                                    onClick={handleProfile}
-                                >
-                                    Notifications &nbsp;&nbsp;
-                                    <FiBell />
-                                </NavLink>
-                            </li>
-                            <hr />
-                            <li>
-                                <a style={{ cursor: "pointer" }}>
-                                    Logout <IoMdLogOut />
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </React.Fragment>
-            )}
         </header>
     );
 };

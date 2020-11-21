@@ -1,11 +1,50 @@
-import React from 'react'
+import React, { useState } from "react";
+import { AiOutlineEdit } from "react-icons/ai";
+import UpdatePassword from "./partials/UpdatePassword";
+import UpdateProfile from "./partials/UpdateProfile";
+import "./users.css";
 
 const Profile = () => {
+    const [update, setUpdate] = useState({
+        component: <UpdateProfile />,
+        title:"profile-update",
+    });
     return (
-        <div>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis libero expedita commodi fuga, eos quis rerum! In iusto neque laudantium reiciendis quod, quidem at doloribus distinctio. Tempora aspernatur obcaecati sapiente inventore optio ad nihil culpa. Officiis ipsa quos ab deleniti sapiente facere, molestias magni? Architecto a molestias, quibusdam necessitatibus, repellendus amet temporibus vel quis harum ratione error ut in voluptates dolorum minima explicabo iusto enim illum? Quos, saepe dolore vitae quae eius quis et molestiae magni, aliquam obcaecati atque iusto similique velit deserunt cumque vero quo reprehenderit, laboriosam modi tempore ex iste? Eveniet placeat perspiciatis iste, quos unde architecto sequi nam fugiat possimus ad amet suscipit nemo fuga! Sunt nihil, explicabo placeat omnis commodi saepe tenetur fuga laborum eligendi necessitatibus officiis quas, quam expedita nisi obcaecati? Fugit alias, vero molestiae, id molestias tempora nisi quae consequatur dicta recusandae vel, maiores laudantium debitis beatae? Quas inventore consectetur optio sequi cum porro dolores velit commodi iste? Tenetur repudiandae voluptatum dolorum! Tempore accusamus expedita blanditiis, cumque deleniti eaque totam quia odio pariatur ab sequi, rem reiciendis! Quia quibusdam corporis eligendi, voluptates distinctio eos, unde adipisci magnam dolor delectus quas impedit doloribus incidunt id minima assumenda cum ab cumque atque itaque iste modi aliquid.
+        <div className="my-4 mx-2">
+            <div className="d-flex">
+                <button
+                    onClick={() =>
+                        setUpdate({
+                            ...update,
+                            title: "profile-update",
+                            component: <UpdateProfile />
+                        })
+                    }
+                    className={`btn  light__primary__bg mb-3 mr-3 ${
+                        update.title === "profile-update" ? "activeBorder" : ""
+                    }`}
+                >
+                    Profile <AiOutlineEdit />
+                </button>
+                <button
+                    onClick={() =>
+                        setUpdate({
+                            ...update,
+                            title: "password-update",
+                            component: <UpdatePassword />
+                        })
+                    }
+                    className={`btn light__primary__bg mb-3 ${
+                        update.title === "password-update" ? "activeBorder" : ""
+                    }`}
+                >
+                    Password <AiOutlineEdit />
+                </button>
+            </div>
+            <br/>
+            {update.component}
         </div>
-    )
-}
+    );
+};
 
-export default Profile
+export default Profile;

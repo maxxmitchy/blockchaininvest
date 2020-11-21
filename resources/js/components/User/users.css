@@ -4,12 +4,39 @@
     --tertiary: rgb(82, 206, 11);
     --white: #fff;
     --black: #000;
-    --indicator: #ff7900;
+    --indicatorSent: #fca61d25;
     --backdropBg: rgba(0, 0, 0, 0.7);
+    --indicatorReceived: #a0f5f14f;
+    --pending: rgba(255, 0, 0, 0.164);
+    --success:rgba(0, 128, 0, 0.182);
     --font: 900;
     --animate-duration: 500ms;
     --animate-delay: 500ms;
     --animate-repeat: 1;
+}
+
+.sentBg {
+    background-color: var(--indicatorSent);
+}
+
+.sentCol{
+    color: #FCA51D;
+    font-size: 1.2rem;
+}
+.receivedCol{
+    color:  #055551f3;
+    font-size: 1.2rem;
+}
+
+.receivedBg {
+    background-color: var(--indicatorReceived);
+}
+
+.pending{
+    background-color: var(--pending);
+}
+.success{
+    background-color: var(--success);
 }
 
 .primary__color {
@@ -34,24 +61,38 @@
     padding: 0.5rem 1rem;
     font-weight: 900;
 }
-.invalid{
+.invalid {
     border-bottom: 2px solid red !important;
 }
 .card__rounded__smooth {
     border-radius: 10px !important;
 }
+.currency_sel {
+    background-color: rgb(240, 240, 240);
+}
+
+.currency_select:hover {
+    background-color: rgb(240, 240, 240);
+}
 .send__button {
     border-radius: 10px;
-    padding: 0.8rem 1rem;
-    border: none;
-    background: rgb(100, 199, 158);
-    font-weight: 900;
-}
-.deposit_button{
-    border-radius: 10px;
-    padding: .5rem .7rem;
+    padding: 0.5rem 1rem;
     border: none;
     background: var(--primary);
+    font-weight: 900;
+}
+.deposit_button {
+    border-radius: 10px;
+    padding: 0.5rem 0.7rem;
+    border: none;
+    background: var(--primary);
+    font-weight: 900;
+}
+.withdraw_button {
+    border-radius: 10px;
+    padding: 0.5rem 0.7rem;
+    border: none;
+    background:  #081616d9;
     font-weight: 900;
 }
 .chart__card {
@@ -65,7 +106,7 @@
 
 .info_modal {
     position: fixed;
-    top: 54px;
+    top: 54px !important;
     bottom: 0;
     right: 0;
     left: 0;
@@ -81,15 +122,29 @@
     border-radius: 10px;
     /* bottom: 20%; */
 }
-.btc-grid{
+.btc-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(80px,1fr));
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
     row-gap: 10px;
     column-gap: 10px;
 }
 
-.show{
+.show {
     display: none !important;
+}
+
+.activeBorder,
+.activeBorder:hover {
+    background: var(--primary) !important;
+    color: var(--white);
+}
+
+.fa-times {
+    position: absolute;
+    right: -0.6rem;
+    top: -1.5rem;
+    font-size: 1em;
+    cursor: pointer;
 }
 
 @media (max-width: 678px) {
@@ -99,14 +154,13 @@
         left: 5%;
         /* bottom: 5%; */
     }
-    .info_plus{
+    .info_plus {
         bottom: 5%;
     }
-    .hide{
+    .hide {
         display: none;
     }
-    .show{
+    .show {
         display: flex !important;
     }
-    
 }
